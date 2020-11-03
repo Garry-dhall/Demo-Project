@@ -1,27 +1,41 @@
 using NUnit.Framework;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
+using System.Threading;
 
 namespace NUnitTestProject5
 {
     public class Tests
     {
          
-        IWebDriver d1;
+        IWebDriver driver;
 
         [SetUp]
         public void Setup()
         {
-            d1 = new ChromeDriver();
+            driver = new ChromeDriver();
+            driver.Manage().Window.Maximize();
         }
 
         [Test]
-
-
         public void VerifyLoginFUnctionality()
         {
 
-            d1.Navigate().GoToUrl("http://horse.industryconnect.io");
+            driver.Navigate().GoToUrl("http://horse.industryconnect.io");
+
+            driver.FindElement(By.Id("UserName")).SendKeys("Hari");
+
+            driver.FindElement(By.Id("Password")).SendKeys("123123");
+
+            driver.FindElement(By.CssSelector("input[type= submit]")).Click();
+            Thread.Sleep(5000);
+
+        
+            
+            driver.FindElement(By.LinkText("Hello hari!")).Click();
+
+            //d1.FindElement(By.CssSelector("li [class= dropdown])a [data-toggle= dropdown]"));
+
         }
 
 
@@ -31,8 +45,8 @@ namespace NUnitTestProject5
         public void CloseDriver()
 
         { 
-            d1.Close();
-            d1.Dispose();   
+            driver.Close();
+            driver.Dispose();   
         }
        
 
