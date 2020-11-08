@@ -21,7 +21,7 @@ namespace NUnitTestProject5
             // Implicit wait : it made the driver wait for some specfied amount of time 
             // till element to be interacted was not available.
 
-            driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(2);
+            driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(10);
         }
 
         [Test]
@@ -57,7 +57,7 @@ namespace NUnitTestProject5
             //Thread.Sleep(2000);
             //click on Create New Button
             driver.FindElement(By.XPath("//*[contains(text(),'Create New')]")).Click();
-            //Thread.Sleep(2000);
+            Thread.Sleep(2000);
             //Click on material dropdown
             driver.FindElement(By.XPath("//span[text()='Material']")).Click();
             //Thread.Sleep(2000);
@@ -68,14 +68,37 @@ namespace NUnitTestProject5
             // Create new button 
             driver.FindElement(By.Id("TypeCode_option_selected")).Click();
             //Thread.Sleep(2000);
+            int code = new Random().Next(1000, 1050);
+
+
             //Enter code value
-            driver.FindElement(By.Id("Code")).SendKeys("7878");
+            driver.FindElement(By.Id("Code")).SendKeys(code.ToString());
             //Enter description
             driver.FindElement(By.Id("Description")).SendKeys("order new unit");
             //Thread.Sleep(2000);
             //save the new created material details
             driver.FindElement(By.Id("SaveButton")).Click();
-            //Thread.Sleep(2000);
+            Thread.Sleep(2000);
+            // Go to the last page
+            driver.FindElement(By.XPath("//*[contains(text(),'Go to the last page')]")).Click();
+            Thread.Sleep(2000);
+            int i;
+           
+
+            for (i = 1; i <= 20; i++)
+            {
+                var codeText = driver.FindElement(By.XPath("//div[@class='k-grid-content']/table/tbody/tr["+ i+"]/td[1]")).Text;
+                Thread.Sleep(2000);
+
+                if (codeText == code.ToString())
+                {
+                    Console.WriteLine("Code Verified");
+                    break;
+                }
+            }
+
+
+
         }
         [TearDown]
        
