@@ -7,9 +7,9 @@ using System.Threading;
 
 namespace NUnitTestProject5
 {
-    public class Tests
+    public class UnitTest1
     {
-         
+
         IWebDriver driver;
 
         [SetUp]
@@ -21,94 +21,34 @@ namespace NUnitTestProject5
             // Implicit wait : it made the driver wait for some specfied amount of time 
             // till element to be interacted was not available.
 
-            driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(10);
+            driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(20);
         }
 
         [Test]
-        public void VerifyLoginFUnctionality()
+        public void VerifyRecordCanBeCreatedOnHorsePortal()
         {
-            //Open horse industry connect website
-            driver.Navigate().GoToUrl("http://horse.industryconnect.io");
-            //Enter valid username
-            driver.FindElement(By.Id("UserName")).SendKeys("Hari");
-            //Enter valid password
-            driver.FindElement(By.Id("Password")).SendKeys("123123");
-            //Click on Submit buttton
-            driver.FindElement(By.CssSelector("input[type= submit]")).Click();
-            //Thread.Sleep(5000);
-            //Verifying Username on home page
-           var x=  driver.FindElement(By.LinkText("Hello hari!")).Text;
-           if(x == "Hello hari!")
-            {
-                Console.WriteLine("Login Successfull");
-            }
-            else
-            {
-                Console.WriteLine("Login Unsuccessfull");
-            }
-            //Click on Hello hari! dropdown
-            driver.FindElement(By.LinkText("Hello hari!")).Click();
-            //Thread.Sleep(2000);            
-            //click on Administrator dropdown
-            driver.FindElement(By.XPath("//*[contains(text(),'Administration')]")).Click();
-            //Thread.Sleep(2000);
-            //click on Time & Materials
-            driver.FindElement(By.XPath("//*[contains(text(),'Time & Materials')]")).Click();
-            //Thread.Sleep(2000);
-            //click on Create New Button
-            driver.FindElement(By.XPath("//*[contains(text(),'Create New')]")).Click();
-            Thread.Sleep(2000);
-            //Click on material dropdown
-            driver.FindElement(By.XPath("//span[text()='Material']")).Click();
-            //Thread.Sleep(2000);
-            //Select material
 
-            // Transition to Create Flow 
+            int code = new Random().Next(1089, 1999);
 
-            // Create new button 
-            driver.FindElement(By.Id("TypeCode_option_selected")).Click();
-            //Thread.Sleep(2000);
-            int code = new Random().Next(1000, 1050);
+            // verify login functionality
+            loginpage Verify = new loginpage(driver);
+            Verify.VerifyLoginFUnctionality();
 
+            //create new record
+            MainPage create = new MainPage(driver);
+            create.creatRecord(code);
 
-            //Enter code value
-            driver.FindElement(By.Id("Code")).SendKeys(code.ToString());
-            //Enter description
-            driver.FindElement(By.Id("Description")).SendKeys("order new unit");
-            //Thread.Sleep(2000);
-            //save the new created material details
-            driver.FindElement(By.Id("SaveButton")).Click();
-            Thread.Sleep(2000);
-            // Go to the last page
-            driver.FindElement(By.XPath("//*[contains(text(),'Go to the last page')]")).Click();
-            Thread.Sleep(2000);
-            int i;
-           
-
-            for (i = 1; i <= 20; i++)
-            {
-                var codeText = driver.FindElement(By.XPath("//div[@class='k-grid-content']/table/tbody/tr["+ i+"]/td[1]")).Text;
-                Thread.Sleep(2000);
-
-                if (codeText == code.ToString())
-                {
-                    Console.WriteLine("Code Verified");
-                    break;
-                }
-            }
-
-
+            // Verify new record
+            VerifyNewRecord Code = new VerifyNewRecord(driver);
+            Code.verifyRecord(code);
 
         }
+
         [TearDown]
-       
         public void CloseDriver()
-
-        { 
+        {
             driver.Close();
-            driver.Dispose();   
+            driver.Dispose();
         }
-       
-
     }
 }
